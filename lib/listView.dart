@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:listview_flutter/itemList.dart';
 import 'package:listview_flutter/userModel.dart';
 
-class ListViewActivity extends StatefulWidget {
+
+class listview extends StatefulWidget {
+  const listview({Key? key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => ListViewActivityState();
+  State<listview> createState() => _listviewState();
 }
 
-class ListViewActivityState extends State<ListViewActivity> {
+class _listviewState extends State<listview> {
   List<UserModel> data = [
     UserModel(1, "AI", "Adhanafi Ilyasa", "Pengembangan Peranggkat Lunak dan Game"),
     UserModel(2, "AA", "Ahmad Aziz", "Pengembangan Peranggkat Lunak dan Game"),
@@ -30,32 +31,80 @@ class ListViewActivityState extends State<ListViewActivity> {
     UserModel(138, "HF", "Hibatullah Fawwaz", "Pengembangan Peranggkat Lunak dan Game"),
   ];
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.cyan,
-        title: Text(
-          "Data Siswa PPLG 1",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
-      body: Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: ListView.builder(
-            padding: EdgeInsets.only(bottom: 24),
-            itemCount: data.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ItemUser(index, data[index], (dataModel) {
-                onListClick(dataModel);
-              });
-            }),
+Widget avatar(int index){
+    return CircleAvatar(
+      radius: 24,
+      child: Text(
+        data[index].ShortName,
+        style: TextStyle(color: Colors.white),
       ),
     );
   }
+  Widget textData(int index){
+    return Expanded(child: Container(
+      margin: EdgeInsets.only(left: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            data[index].name,
+            style: TextStyle(fontSize: 16,
+                fontWeight: FontWeight.w600),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 2),
+            child: Text(data[index].Jurusan),
+          ),
+        ],
+      ),
+    ));
+  }
 
-  onListClick(UserModel dataUser) {
-    print("Data: " + dataUser.name);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // appBar: AppBar(title: Text("Listview"),),
+      body: ListView.builder(
+        padding: EdgeInsets.all(5),
+        itemCount: data.length,
+        itemBuilder: (buildContext, index) {
+          return GestureDetector(
+            onTap: () => showDialog(context: context, builder: (BuildContext context)=> AlertDialog(
+              title: Text("Hapus Kontak"),
+              content: Text("Anda yakin ingin menghapus kontak ${data[index].name}?"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("Ya"),
+                  onPressed: (){
+                    setState(() {
+                      data.removeAt(index);
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+                FlatButton(
+                  child: Text("Tidak"),
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            )),
+            child: Container(
+              margin: EdgeInsets.all(10),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  avatar(index),
+                  textData(index),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }

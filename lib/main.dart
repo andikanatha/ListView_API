@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:listview_flutter/Tabs.dart';
 import 'package:listview_flutter/listView.dart';
 
 void main() {
@@ -14,9 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'List Siswa PPLG 01',
       theme: ThemeData(
-        primarySwatch: Colors.cyan,
+        primarySwatch: Colors.teal,
       ),
-      home:  ListViewActivity(),
+      home: const Tabs(),
     );
   }
 }
